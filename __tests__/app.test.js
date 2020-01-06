@@ -59,5 +59,16 @@ describe('app routes', () => {
       });
   });
 
-  
+  it('fails when a bad password is used', async() => {
+    await User.create({ email: 'test@test.com', password: 'password' });
+    return request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: 'test@test.com', password: 'badpassword' })
+      .then(res => {
+        expect(res.body).toEqual({
+          message: 'Invalid Email/Password',
+          status: 401
+        });
+      });
+  });
 });
