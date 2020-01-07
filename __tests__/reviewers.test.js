@@ -14,22 +14,30 @@ describe('Reviewer routes', () => {
   beforeEach(() => {
     return mongoose.connection.dropDatabase();
   });
-
   let reviewerArray = [];
 
   beforeEach(async() => {
-    reviewerArray = await Promise.all([
-      Reviewer.create({
+    // reviewerArray = await Promise.all([
+    //   Reviewer.create({
+    //     name: 'Gene Siskel',
+    //     company: 'Chicago Tribune'
+    //   }),
+    //   Reviewer.create({
+    //     name: 'Roger Ebert',
+    //     company: 'Other Chicago Paper'
+    //   })
+    // ]);
+    reviewerArray = await Reviewer.create([
+      {
         name: 'Gene Siskel',
         company: 'Chicago Tribune'
-      }),
-      Reviewer.create({
+      },
+      {
         name: 'Roger Ebert',
         company: 'Other Chicago Paper'
-      })
+      }
     ]);
   });
-
   afterAll(() => {
     mongoose.connection.close();
   });
