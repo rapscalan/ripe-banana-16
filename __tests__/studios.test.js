@@ -17,14 +17,16 @@ describe('Studio routes', () => {
   let studioArray = [];
   beforeEach(async() => {
     studioArray = await Promise.all([
-      Studio.create({ name: 'Miramax', 
+      Studio.create({ 
+        name: 'Miramax', 
         address: { 
           city: 'Los Angeles', 
           state: 'California',
           country: 'USA'
         }
       }),
-      Studio.create({ name: 'Sony',
+      Studio.create({ 
+        name: 'Sony',
         address: {
           city: 'Hollywood',
           state: 'California',
