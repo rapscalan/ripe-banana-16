@@ -54,4 +54,15 @@ describe('Actor routes', () => {
         });
       });
   });
+
+  it('can get all Actors', () => {
+    return request(app)
+      .get('/api/v1/actors')
+      .then(res => {
+        actorArray = JSON.parse(JSON.stringify(actorArray));
+        actorArray.forEach(actor => {
+          expect(res.body).toContainEqual(actor);
+        });
+      });
+  });
 });
