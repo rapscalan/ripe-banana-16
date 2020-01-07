@@ -49,4 +49,28 @@ describe('Studio routes', () => {
         });
       });      
   });
+
+  it('can create a studio', () => {
+    return request(app)
+      .post('/api/v1/studios')
+      .send({ name: 'Paramount',
+        address: {
+          city: 'Culver City',
+          state: 'California',
+          country: 'USA'
+        }  
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          name: 'Paramount',
+          address: {
+            city: 'Culver City',
+            state: 'California',
+            country: 'USA'
+          },
+          __v: 0
+        });
+      });
+  });
 });
