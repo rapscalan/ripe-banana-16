@@ -33,7 +33,7 @@ describe('Actor routes', () => {
   });
 
   afterAll(() => {
-    mongoose.connection.close();
+    return mongoose.connection.close();
   });
 
   it('can create an actor', () => {

@@ -17,29 +17,29 @@ describe('Reviewer routes', () => {
   let reviewerArray = [];
 
   beforeEach(async() => {
-    // reviewerArray = await Promise.all([
-    //   Reviewer.create({
-    //     name: 'Gene Siskel',
-    //     company: 'Chicago Tribune'
-    //   }),
-    //   Reviewer.create({
-    //     name: 'Roger Ebert',
-    //     company: 'Other Chicago Paper'
-    //   })
-    // ]);
-    reviewerArray = await Reviewer.create([
-      {
+    reviewerArray = await Promise.all([
+      Reviewer.create({
         name: 'Gene Siskel',
         company: 'Chicago Tribune'
-      },
-      {
+      }),
+      Reviewer.create({
         name: 'Roger Ebert',
         company: 'Other Chicago Paper'
-      }
+      })
     ]);
+    // reviewerArray = await Reviewer.create([
+    //   {
+    //     name: 'Gene Siskel',
+    //     company: 'Chicago Tribune'
+    //   },
+    //   {
+    //     name: 'Roger Ebert',
+    //     company: 'Other Chicago Paper'
+    //   }
+    // ]);
   });
   afterAll(() => {
-    mongoose.connection.close();
+    return mongoose.connection.close();
   });
 
   it('can create a reviewer', () => {
