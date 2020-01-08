@@ -132,4 +132,15 @@ describe('Film routes', () => {
         );
       });
   });
+
+  it('can get all films', () => {
+    return request(app)
+      .get('/api/v1/films')
+      .then(res => {
+        filmArray = JSON.parse(JSON.stringify(filmArray));
+        filmArray.forEach(film => {
+          expect(res.body).toContainEqual(film);
+        });
+      });
+  });
 });
