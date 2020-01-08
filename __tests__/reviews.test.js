@@ -69,7 +69,7 @@ describe('Review routes', () => {
         }
       ]
     });
-    console.log(castArr[0]);
+    //console.log(castArr[0]);
     reviewer = await Reviewer.create({
       name: 'Joe',
       company: 'Times'
