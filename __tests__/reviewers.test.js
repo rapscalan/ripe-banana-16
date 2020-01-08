@@ -70,4 +70,13 @@ describe('Reviewer routes', () => {
         });
       });
   });
+
+  it('can update a reviewer', () => {
+    return request(app)
+      .patch(`/api/v1/reviewers/${reviewerArray[0].id}`)
+      .send({ company: 'Boston Globe' })
+      .then(res => {
+        expect(res.body.company).toEqual('Boston Globe');
+      });
+  });
 });
