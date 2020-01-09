@@ -7,6 +7,8 @@ const mongoose = require('mongoose');
 const Actor = require('../lib/models/Actor');
 const Film = require('../lib/models/Film');
 const Studio = require('../lib/models/Studio');
+const Review = require('../lib/models/Review');
+const Reviewer = require('../lib/models/Reviewer');
 
 
 describe('Film routes', () => {
@@ -21,9 +23,17 @@ describe('Film routes', () => {
   let filmArray;
   let studio;
   let castArr;
+  let reviewArray;
+  let reviewer;
 
   beforeEach(async() => {
     const birthDate = new Date('1967-10-05');
+
+    reviewer = await Reviewer.create({
+      name: 'Roger Ebert',
+      company: 'Chicago Newspaper'
+    });
+
     studio = await Studio.create({
       name: 'MGM',
       address: {
@@ -32,6 +42,7 @@ describe('Film routes', () => {
         country: 'USA'
       }
     });
+
     castArr = await Actor.create([
       {
         name: 'Guy Pearce',
@@ -54,6 +65,7 @@ describe('Film routes', () => {
         pob: 'Washington, D.C.'
       }
     ]);
+
     filmArray = await Film.create([{
       title: 'Memento',
       studio: studio._id,
@@ -84,6 +96,21 @@ describe('Film routes', () => {
         }
       ]
     }
+    ]);
+
+    reviewArray = await Promise.all([
+      Review.create({
+        rating: 5,
+        review: 'Great movie',
+        reviewer: reviewer._id,
+        film: filmArray[1]._id
+      }),
+      Review.create({
+        rating: 2,
+        review: 'Confusing movie',
+        reviewer: reviewer._id,
+        film: filmArray[1]._id
+      })
     ]);
   });
 
@@ -141,6 +168,15 @@ describe('Film routes', () => {
         filmArray.forEach(film => {
           expect(res.body).toContainEqual(film);
         });
+      });
+  });
+
+  it('can get all the data for a film', () => {
+    return request(app)
+      .get(`/api/v1/films/${filmArray[1]._id}`)
+      .then(res => {
+        expect(res.body).toEqual(expect.any(Object));
+        
       });
   });
 });
