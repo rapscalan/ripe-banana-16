@@ -19,7 +19,6 @@ describe('Reviewer routes', () => {
     return mongoose.connection.dropDatabase();
   });
   let reviewerArray = [];
-  let reviewArray;
   let filmArray;
   let studio;
   let castArr;
@@ -73,7 +72,7 @@ describe('Reviewer routes', () => {
       ]
     });
 
-    reviewArray = await Review.create([
+    await Review.create([
       {
         rating: 5,
         reviewer: reviewerArray[0]._id,

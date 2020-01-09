@@ -16,7 +16,6 @@ describe('Studio routes', () => {
     return mongoose.connection.dropDatabase();
   });
   let studioArray = [];
-  let filmArray;
 
   beforeEach(async() => {
     studioArray = await Promise.all([
@@ -38,7 +37,7 @@ describe('Studio routes', () => {
       })
     ]);
     
-    filmArray = await Promise.all([
+    await Promise.all([
       Film.create({
         title: 'The Godfather',
         studio: studioArray[1]._id,
