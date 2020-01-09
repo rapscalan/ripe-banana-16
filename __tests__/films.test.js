@@ -175,8 +175,14 @@ describe('Film routes', () => {
     return request(app)
       .get(`/api/v1/films/${filmArray[1]._id}`)
       .then(res => {
-        expect(res.body).toEqual(expect.any(Object));
-        
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          cast: expect.any(Array),
+          released: 2001,
+          reviews: expect.any(Array),
+          title: 'Mulholland Drive',
+          studio: expect.any(Object)
+        });
       });
   });
 });
