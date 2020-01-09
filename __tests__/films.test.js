@@ -23,7 +23,6 @@ describe('Film routes', () => {
   let filmArray;
   let studio;
   let castArr;
-  let reviewArray;
   let reviewer;
 
   beforeEach(async() => {
@@ -98,7 +97,7 @@ describe('Film routes', () => {
     }
     ]);
 
-    reviewArray = await Promise.all([
+    await Promise.all([
       Review.create({
         rating: 5,
         review: 'Great movie',

@@ -18,7 +18,6 @@ describe('Actor routes', () => {
   });
 
   let actorArray = [];
-  let filmArray;
 
   beforeEach(async() => {
     actorArray = await Promise.all([
@@ -38,7 +37,7 @@ describe('Actor routes', () => {
         name: 'MGM',
       });
 
-    filmArray = await Promise.all([
+    await Promise.all([
       Film.create({
         title: 'The Maltese Falcon',
         studio: studio._id,
