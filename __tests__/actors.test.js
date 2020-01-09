@@ -5,6 +5,8 @@ const app = require('../lib/app');
 const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
 const Actor = require('../lib/models/Actor');
+const Film = require('../lib/models/Film');
+const Studio = require('../lib/models/Studio');
 
 describe('Actor routes', () => {
   beforeAll(() => {
@@ -16,6 +18,7 @@ describe('Actor routes', () => {
   });
 
   let actorArray = [];
+  let filmArray;
 
   beforeEach(async() => {
     actorArray = await Promise.all([
@@ -28,6 +31,31 @@ describe('Actor routes', () => {
         name: 'Marlon Brando',
         dob: new Date('1924-04-23'),
         pob: 'Omaha, Nebraska'
+      })
+    ]);
+    const studio = await Studio
+      .create({
+        name: 'MGM',
+      });
+
+    filmArray = await Promise.all([
+      Film.create({
+        title: 'The Maltese Falcon',
+        studio: studio._id,
+        released: 1942,
+        cast: [{
+          role: 'Detective',
+          actor: actorArray[0]._id
+        }]
+      }),
+      Film.create({
+        title: 'Casa Blanca',
+        studio: studio._id,
+        released: 1943,
+        cast: [{
+          role: 'Joe',
+          actor: actorArray[0]._id
+        }]
       })
     ]);
   });
@@ -62,6 +90,21 @@ describe('Actor routes', () => {
         actorArray = JSON.parse(JSON.stringify(actorArray));
         actorArray.forEach(actor => {
           expect(res.body).toContainEqual(actor);
+        });
+      });
+  });
+
+  it('can get an actor and their films', () => {
+    return request(app)
+      .get(`/api/v1/actors/${actorArray[0]._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          __v: 0,
+          _id: expect.any(String),
+          dob: '1899-12-25T00:00:00.000Z',
+          pob: 'New York, New York',
+          name: 'Humphrey Bogart',
+          films: expect.any(Array)
         });
       });
   });
