@@ -109,10 +109,10 @@ describe('Review routes', () => {
       .then(res => {
         reviewArray = JSON.parse(JSON.stringify(reviewArray));
         
-        reviewArray.sort((a, b)=>b.rating - a.rating).slice(100).forEach(review => {
+        reviewArray.sort((a, b)=>a.rating - b.rating).slice(100).forEach(review => {
           expect(res.body)
             .toContainEqual({
-              _id: expect.any(String),
+              _id: review._id,
               rating: review.rating,
               review: review.review,
               film: {
