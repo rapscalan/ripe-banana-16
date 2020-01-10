@@ -74,21 +74,6 @@ describe('Review routes', () => {
           film: film._id
         })
     ));
-    //reviewArray = JSON.parse(JSON.stringify(reviewArray));
-    // reviewArray = await Review.create([
-    //   {
-    //     rating: 5,
-    //     reviewer: reviewer._id,
-    //     review: 'What a good movie',
-    //     film: film._id
-    //   },
-    //   {
-    //     rating: 1,
-    //     reviewer: reviewer._id,
-    //     review: 'What a bad movie',
-    //     film: film._id
-    //   }
-    // ]);
   });
 
   afterAll(() => {
