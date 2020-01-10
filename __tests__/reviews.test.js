@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
+const Chance = require('chance').Chance();
 const Actor = require('../lib/models/Actor');
 const Film = require('../lib/models/Film');
 const Studio = require('../lib/models/Studio');
@@ -23,16 +24,7 @@ describe('Review routes', () => {
   let reviewer;
 
   beforeEach(async() => {
-    // reviewerArray = await Promise.all([
-    //   Reviewer.create({
-    //     name: 'Gene Siskel',
-    //     company: 'Chicago Tribune'
-    //   }),
-    //   Reviewer.create({
-    //     name: 'Roger Ebert',
-    //     company: 'Other Chicago Paper'
-    //   })
-    // ]);
+
     const birthDate = new Date('1968-09-28');
     const studio = await Studio.create({
       name: 'MGM',
@@ -69,26 +61,36 @@ describe('Review routes', () => {
         }
       ]
     });
-    //console.log(castArr[0]);
     reviewer = await Reviewer.create({
       name: 'Joe',
       company: 'Times'
     });
-    reviewArray = await Review.create([
-      {
-        rating: 5,
-        reviewer: reviewer._id,
-        review: 'What a good movie',
-        film: film._id
-      },
-      {
-        rating: 1,
-        reviewer: reviewer._id,
-        review: 'What a bad movie',
-        film: film._id
-      }
-    ]);
+    reviewArray = await Promise.all([...Array(120)].map(() =>
+      Review
+        .create({
+          rating: Chance.integer({ min: 1, max: 5 }),
+          reviewer: reviewer._id,
+          review: 'Good Movie',
+          film: film._id
+        })
+    ));
+    //reviewArray = JSON.parse(JSON.stringify(reviewArray));
+    // reviewArray = await Review.create([
+    //   {
+    //     rating: 5,
+    //     reviewer: reviewer._id,
+    //     review: 'What a good movie',
+    //     film: film._id
+    //   },
+    //   {
+    //     rating: 1,
+    //     reviewer: reviewer._id,
+    //     review: 'What a bad movie',
+    //     film: film._id
+    //   }
+    // ]);
   });
+
   afterAll(() => {
     return mongoose.connection.close();
   });
@@ -121,9 +123,18 @@ describe('Review routes', () => {
       .get('/api/v1/reviews')
       .then(res => {
         reviewArray = JSON.parse(JSON.stringify(reviewArray));
-        reviewArray.forEach(review => {
+        
+        reviewArray.sort((a, b)=>b.rating - a.rating).slice(100).forEach(review => {
           expect(res.body)
-            .toContainEqual(review);
+            .toContainEqual({
+              _id: expect.any(String),
+              rating: review.rating,
+              review: review.review,
+              film: {
+                _id: film.id,
+                title: film.title,
+              }
+            });
         });
       });
   });
